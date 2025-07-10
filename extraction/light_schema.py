@@ -14,5 +14,5 @@ class Relationship(BaseModel):
     relation: str
 
 class TripleExtractionOutput(BaseModel):
-    entities: List[MedicalEntity]
+    entities: List[Entity]
     relationships: List[Relationship]

@@ -135,7 +135,6 @@ class HousingQATSVStatutes(BaseDataset):
 
 
 if __name__ == "__main__":
-    # --- esempio Statutes TSV ---
     graphragbench_medical = GraphRAGBenchMedical(
         DATASETS_BASE_PATH + "/graphragbench_medical/graphragbench_medical_corpus",
         chunk_size=512
