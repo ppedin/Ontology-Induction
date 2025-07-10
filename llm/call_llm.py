@@ -2,6 +2,7 @@ from google import genai
 from google.genai import types
 import llm_keys
 from pydantic import BaseModel
+import schemas
 
 class SimpleResponse(BaseModel):
     response: str
@@ -38,8 +39,8 @@ if __name__ == "__main__":
         gemini_client=genai.Client(api_key=llm_keys.GEMINI_KEY),
         model_name="gemini-2.5-flash-lite-preview-06-17",
         system_prompt="You are a helpful assistant.",
-        user_prompt="What is the capital of France?",
-        response_schema=SimpleResponse,
+        user_prompt="Which is the relation between the subject and the object in the following sentence: 'The capital of France is Paris.'",
+        response_schema=schemas.TripleExtractionOutput,
         thinking_budget=512,
         verbose=True
     )
