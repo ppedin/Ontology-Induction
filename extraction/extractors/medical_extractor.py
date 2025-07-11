@@ -18,7 +18,8 @@ class MedicalEntity(BaseModel):
 class Relationship(BaseModel):
     head: str
     tail: str
-    relation: str
+    relation_description: str
+    relation_keywords: str
 
 
 class TripleExtractionOutput(BaseModel):
@@ -41,7 +42,7 @@ class MedicalExtractor(TripleExtractorBase[TripleExtractionOutput]):
     ):
         from typing import get_args
         prompt_path = (
-            Path("C:/Users/paolo/Desktop/Ontology-Induction/extraction/prompt_template.txt")
+            Path("C:/Users/paolo/Desktop/Ontology-Induction/extraction/lightrag_prompt_template.txt")
         )
         system_prompt_template = prompt_path.read_text(encoding="utf-8")
         entity_types = ", ".join(get_args(MedicalEntity.__annotations__["entity_type"]))

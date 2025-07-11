@@ -13,7 +13,8 @@ class MedicalEntity(BaseModel):
 class Relationship(BaseModel):
     head: str
     tail: str
-    relation: str
+    relation_description: str
+    relation_keywords: str
 
 class TripleExtractionOutput(BaseModel):
     entities: List[MedicalEntity]
