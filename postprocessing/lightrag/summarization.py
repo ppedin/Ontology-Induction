@@ -394,8 +394,9 @@ def summarize_graph(input_dir: Path, output_dir: Path, num_workers: int = 4) -> 
     # -------------------------------------------------------------------#
     # Parallel processing
     # -------------------------------------------------------------------#
-    _start_pool("entities", tasks_entities, output_dir, num_workers)
+    #  _start_pool("entities", tasks_entities, output_dir, num_workers)
     _start_pool("relationships", tasks_rel, output_dir, num_workers)
+    _start_pool("entities", tasks_entities, output_dir, num_workers)
 
     # -------------------------------------------------------------------#
     # Merge temp results with original data
