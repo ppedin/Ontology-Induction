@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import List, Literal, Optional
+import json
 
 class MedicalEntity(BaseModel):
     entity_name: str
@@ -17,3 +18,4 @@ class Relationship(BaseModel):
 class TripleExtractionOutput(BaseModel):
     entities: List[MedicalEntity]
     relationships: List[Relationship]
+
