@@ -1,6 +1,7 @@
 pip install -q -U google-genai
 pip install pydantic
 pip install pyarrow
-pip install tqdm==2.2.3
+pip install tqdm
 pip install pandas
 pip install -U sentence-transformers
+pip install faiss-cpu

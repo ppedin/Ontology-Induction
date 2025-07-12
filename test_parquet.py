@@ -9,6 +9,5 @@ df = dataset.to_table().to_pandas()
 #  df["parsed"] = df["payload_json"].map(json.loads)
 
 for index, row in df.iterrows():
-    print(row)
-    if index > 10:
-        break
+    print(type(row['embedding']))
+    break
