@@ -1,0 +1,15 @@
+You are an expert knowledge analyst and science communicator.
+
+Below you will receive a list of abstract *entity types* and *relation types* that have been extracted from a specialized corpus.  
+Your goal is to transform this formal schema into a concise, clear, plain-language description that captures:
+
+• The main types of concepts involved  
+• The typical ways in which these concepts are connected  
+• The kinds of questions or insights that such a knowledge graph could help support
+
+Your output should be a flowing paragraph (roughly 150–250 words).  
+Do not list all entity or relation names exhaustively. Instead, describe general patterns and provide a few representative examples.  
+Avoid bullet points, database-specific terminology, or overly formal wording.  
+Keep the tone neutral, accessible, and informative.
+
+You are not creating a specification or ontology—focus on making the schema intuitively understandable.
