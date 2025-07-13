@@ -30,6 +30,8 @@ import numpy as np
 import pickle
 from pydantic import BaseModel, Field
 from sentence_transformers import SentenceTransformer
+from evaluation.coherence_evaluation import evaluate_coherence
+
 
 # ---------------------------------------------------------------------------
 # Config – modifica se i percorsi cambiano
@@ -288,7 +290,29 @@ def main():
 
     # 5. generazione risposta RAG
     rag_response = rag_generate_response(question_text, graph_ctx)
-    print(f"RAG response: {rag_response}")
+    #  print(f"RAG response: {rag_response}")
+
+    # 6-bis. Coherence evaluation
+    gold_answer = first_record["Answer"]
+    coherence = evaluate_coherence(
+        gemini_client=gemini_client,
+        model_name="models/gemini-2.5-flash-lite-preview-06-17",
+        question=question_text,
+        gold_answer=gold_answer,
+        model_answer=rag_response,
+        judge_name="GraphRAG-Gemini",
+    )
+
+    # 7. Output finale
+    print("\n========================")
+    print("QUESTION:")
+    print(question_text)
+    print("\nANSWER (GraphRAG-Gemini):")
+    print(rag_response)
+    print("\nGOLD ANSWER:")
+    print(gold_answer)
+    print(f"\nCOHERENCE SCORE (0-10): {coherence.coherence_score}")
+    print("========================")
 
 if __name__ == "__main__":
     main()
