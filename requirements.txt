@@ -5,3 +5,4 @@ pip install tqdm
 pip install pandas
 pip install -U sentence-transformers
 pip install faiss-cpu
+pip install igraph
