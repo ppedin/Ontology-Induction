@@ -1,0 +1,17 @@
+Imagine the following hypothetical scenario:
+
+
+
+You need to answer the question below. To do so, you can navigate a knowledge graph that has been extracted from {CORPUS_TYPE}. Your goal is to reflect on the following: what kind of graph would I need in order to efficiently answer this question? How could I move through such a graph to reach the answer in the most effective way?
+
+
+
+First, provide a graph-based reasoning chain that shows how you would traverse the graph to reach the answer. Each reasoning step must be the traversal of an edge starting from an entity. 
+
+
+
+Then, list the types of entities that would need to be represented in this ideal graph, as well as the types of relations that would connect them. Describe both entity types and relation types in abstract and general terms (e.g., "Treatment", "has_side_effect", "Cancer_Type"): the entities and relationships must not be too specific, and they must be reusable for other questions. Provide a short description with each entity type/relation type. 
+
+
+
+Do not provide the actual answer to the question—focus solely on the structure of reasoning and the graph schema required to support it.
