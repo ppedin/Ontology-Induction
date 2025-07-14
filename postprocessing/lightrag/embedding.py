@@ -151,8 +151,9 @@ def embed_summaries(input_dir: Path, output_dir: Path, batch_size: int = 64) -> 
 # CLI helper
 # --------------------------------------------------------------------------- #
 if __name__ == "__main__":  # pragma: no cover
-    input_dir = "C:/Users/paolo/Desktop/Ontology-Induction/outputs/graphragbench_medical/postprocessing/summarization"
-    output_dir = "C:/Users/paolo/Desktop/Ontology-Induction/outputs/graphragbench_medical/postprocessing/embedding"
+    BASE_PATH = Path("C:/Users/paolo/Desktop/Ontology-Induction/outputs/exp_7_13/graphragbench_medical")
+    input_dir = BASE_PATH / "pragmarag_prompt" / "postprocessing" / "summarization"
+    output_dir = BASE_PATH / "pragmarag_prompt" / "postprocessing" / "embedding"
     batch_size = 64
 
     embed_summaries(input_dir, output_dir, batch_size=batch_size)

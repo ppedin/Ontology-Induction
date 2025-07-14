@@ -110,29 +110,10 @@ def build_igraph(
 # -------------------------------  CLI  ------------------------------------- #
 # --------------------------------------------------------------------------- #
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Build iGraph from parquet files")
-    parser.add_argument(
-        "--entities",
-        type=Path,
-        default=Path(
-            "C:/Users/paolo/Desktop/Ontology-Induction/outputs/graphragbench_medical/postprocessing/deduplication/entities.parquet"
-        ),
-    )
-    parser.add_argument(
-        "--relationships",
-        type=Path,
-        default=Path(
-            "C:/Users/paolo/Desktop/Ontology-Induction/outputs/graphragbench_medical/postprocessing/deduplication/relationships.parquet"
-        ),
-    )
-    parser.add_argument(
-        "--outdir",
-        type=Path,
-        default=Path(
-            "C:/Users/paolo/Desktop/Ontology-Induction/outputs/graphragbench_medical/postprocessing/graph_builder"
-        ),
-    )
-    parser.add_argument("--name", type=str, default="medical_graph")
-    args = parser.parse_args()
+    BASE_PATH = Path("C:/Users/paolo/Desktop/Ontology-Induction/outputs/exp_7_13/graphragbench_medical")
+    entities_pq = BASE_PATH / "pragmarag_prompt" / "postprocessing" / "deduplication" / "entities.parquet"
+    relationships_pq = BASE_PATH / "pragmarag_prompt" / "postprocessing" / "deduplication" / "relationships.parquet"
+    output_dir = BASE_PATH / "pragmarag_prompt" / "postprocessing" / "graph_builder"
 
-    build_igraph(args.entities, args.relationships, args.outdir, args.name)
+    build_igraph(entities_pq, relationships_pq, output_dir)
+

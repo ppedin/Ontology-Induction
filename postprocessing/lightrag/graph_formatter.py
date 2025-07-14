@@ -266,7 +266,6 @@ def format_graph(input_dir: Path, output_dir: Path) -> None:
 
                 # ------------------  entities ------------------ #
                 for ent in parsed.get("entities", []):
-                    print(ent)
                     try:
                         entity_rows.append(
                             {
@@ -332,22 +331,10 @@ def format_graph(input_dir: Path, output_dir: Path) -> None:
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description=(
-            "Post‑process extracted graph parts into two clean Parquet files "
-            "(entities & relationships)."
-        )
-    )
-    parser.add_argument(
-        "input_dir",
-        type=Path,
-        help="Directory containing raw extraction *.parquet parts.",
-    )
-    parser.add_argument(
-        "output_dir",
-        type=Path,
-        help="Directory where the formatted Parquet files will be created.",
-    )
-    args = parser.parse_args()
+    BASE_PATH = Path("C:/Users/paolo/Desktop/Ontology-Induction/outputs/exp_7_13/graphragbench_medical")
 
-    format_graph(args.input_dir, args.output_dir)
+    input_dir = BASE_PATH / "pragmarag_prompt" / "extraction" / "parts"
+    output_dir = BASE_PATH / "pragmarag_prompt" / "postprocessing" / "graph_formatter"
+
+
+    format_graph(input_dir, output_dir)

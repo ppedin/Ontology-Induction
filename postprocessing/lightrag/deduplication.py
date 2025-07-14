@@ -215,8 +215,9 @@ def deduplicate_entities(input_dir: Path, output_dir: Path) -> None:
 # Esecuzione da linea di comando (opzionale)                                  #
 # --------------------------------------------------------------------------- #
 if __name__ == "__main__":
+    BASE_PATH = Path("C:/Users/paolo/Desktop/Ontology-Induction/outputs/exp_7_13/graphragbench_medical")
     deduplicate_entities(
-        input_dir=Path("C:/Users/paolo/Desktop/Ontology-Induction/outputs/graphragbench_medical/postprocessing/graph_formatter"),
-        output_dir=Path("C:/Users/paolo/Desktop/Ontology-Induction/outputs/graphragbench_medical/postprocessing/deduplication")
+        input_dir=BASE_PATH / "pragmarag_prompt" / "postprocessing" / "graph_formatter",
+        output_dir=BASE_PATH / "pragmarag_prompt" / "postprocessing" / "deduplication"
     )
     

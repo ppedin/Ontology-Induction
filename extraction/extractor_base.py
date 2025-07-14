@@ -43,8 +43,8 @@ class TripleExtractorBase(t.Generic[T]):
         self.llm_client = llm_client
         self.model_name = model_name
         self.output_path = output_path
-        self.parts_dir = output_path.with_suffix("") / "parts"
-        self.manifest = output_path.with_suffix("") / "progress.jsonl"
+        self.parts_dir = output_path / "parts"
+        self.manifest = output_path / "progress.jsonl"
         self.batch_size = batch_size
         self.max_workers = max_workers
         self.thinking_budget = thinking_budget
@@ -86,23 +86,32 @@ class TripleExtractorBase(t.Generic[T]):
         with ThreadPoolExecutor(max_workers=self.max_workers) as pool:
             current_batch: list[_WorkItem] = []
             futures = []
+
+            total_chunks = None
+            if hasattr(chunks, "__len__"):
+                total_chunks = len(chunks)
+            pbar = tqdm(total=total_chunks, desc="Chunks", unit="chunk")
+
             for idx, chunk in enumerate(chunks):
                 sha1 = hashlib.sha1(chunk.encode()).hexdigest()
                 if sha1 in self._seen_sha1:
+                    pbar.update(1)
                     continue  # already processed previous run
 
                 current_batch.append(_WorkItem(idx, chunk, sha1))
                 if len(current_batch) == self.batch_size:
                     futures.append(pool.submit(self._process_batch, current_batch))
                     current_batch = []
+                pbar.update(1)
 
             if current_batch:
                 futures.append(pool.submit(self._process_batch, current_batch))
 
             # collect finished tasks and pass to writer
-            for f in as_completed(futures):
+            for f in tqdm(as_completed(futures), total=len(futures), desc="Batches", unit="batch"):
                 record_batches = f.result()
                 work_queue.put(record_batches)
+            pbar.close()
 
         # wait for remaining writes, then close
         work_queue.join()

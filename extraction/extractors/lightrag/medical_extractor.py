@@ -42,7 +42,7 @@ class MedicalExtractor(TripleExtractorBase[TripleExtractionOutput]):
     ):
         from typing import get_args
         prompt_path = (
-            Path("C:/Users/paolo/Desktop/Ontology-Induction/extraction/lightrag_prompt_template.txt")
+            Path("C:/Users/paolo/Desktop/Ontology-Induction/extraction/extractors/lightrag/lightrag_prompt_template.txt")
         )
         system_prompt_template = prompt_path.read_text(encoding="utf-8")
         entity_types = ", ".join(get_args(MedicalEntity.__annotations__["entity_type"]))
@@ -59,11 +59,9 @@ class MedicalExtractor(TripleExtractorBase[TripleExtractionOutput]):
 
     # ---- domain‑specific prompt -------------------------------------------
     def build_user_prompt(self, chunk: str) -> str:
-        return f"""You are an expert medical ontology curator.
+        return f"""
 
-Text:
-\"\"\"{chunk}\"\"\"
+        Text:
+        \"\"\"{chunk}\"\"\"
 
-Extract all entities and relations present in the text.  
-Answer *only* with a JSON matching the provided schema.
-"""
+        """

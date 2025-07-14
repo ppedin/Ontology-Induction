@@ -10,6 +10,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Sequence, Tuple
 from google import genai
+from tqdm import tqdm
 
 import pandas as pd
 import pyarrow as pa
@@ -257,7 +258,7 @@ def _start_pool(  # noqa: WPS231 – clarity > length
 
     logs_dir = output_dir / "logs"
     _ensure_dirs(logs_dir)
-    done_file = logs_dir / f"processed_{kind[:-1]}_ids.txt"
+    done_file = logs_dir / f"processed_{kind}_ids.txt"
     error_log = logs_dir / "error_log.txt"
 
     # -------------------------------------------------------------------#
@@ -267,7 +268,9 @@ def _start_pool(  # noqa: WPS231 – clarity > length
 
     tmp_dir = output_dir  # tmp parquet files live alongside final ones
 
-    with ThreadPoolExecutor(max_workers=num_workers) as pool:
+    total_tasks = len(tasks)
+
+    with ThreadPoolExecutor(max_workers=num_workers) as pool, tqdm(total=total_tasks, desc=f"{kind.capitalize()} queued", unit="item") as pbar:
         for wid in range(num_workers):
             pool.submit(
                 _worker,
@@ -281,6 +284,7 @@ def _start_pool(  # noqa: WPS231 – clarity > length
             )
         for element_id, meta in tasks.items():
             work_q.put((element_id, meta))
+            pbar.update(1)
         for _ in range(num_workers):
             work_q.put(_STOP)
 
@@ -324,7 +328,7 @@ def _merge_tmp_parquets(
 # ---------------------------------------------------------------------------#
 
 
-def summarize_graph(input_dir: Path, output_dir: Path, num_workers: int = 4) -> None:  # noqa: WPS231 – clarity > length
+def summarize_graph(input_dir: Path, output_dir: Path, num_workers: int = 8) -> None:  # noqa: WPS231 – clarity > length
     """
     Read the *deduplicated* Parquet files in ``input_dir``, generate summaries
     for each entity and relationship (in parallel), and write enriched Parquet
@@ -377,8 +381,8 @@ def summarize_graph(input_dir: Path, output_dir: Path, num_workers: int = 4) -> 
     # -------------------------------------------------------------------#
     # Remove already processed IDs
     # -------------------------------------------------------------------#
-    done_entities = _read_done_set(logs_dir / "processed_entity_ids.txt")
-    done_rel = _read_done_set(logs_dir / "processed_relation_ids.txt")
+    done_entities = _read_done_set(logs_dir / "processed_entities_ids.txt")
+    done_rel = _read_done_set(logs_dir / "processed_relationships_ids.txt")
 
     tasks_entities = {k: v for k, v in agg_entities.items() if k not in done_entities}
     tasks_rel = {k: v for k, v in agg_rel.items() if k not in done_rel}
@@ -420,9 +424,10 @@ def summarize_graph(input_dir: Path, output_dir: Path, num_workers: int = 4) -> 
 # Convenience: enable `python summarization.py <input_dir> <output_dir>`
 # ---------------------------------------------------------------------------#
 if __name__ == "__main__":  # pragma: no cover – used only when launched as a script
-    in_dir = Path("C:/Users/paolo/Desktop/Ontology-Induction/outputs/graphragbench_medical/postprocessing/deduplication").expanduser().resolve()
-    out_dir = Path("C:/Users/paolo/Desktop/Ontology-Induction/outputs/graphragbench_medical/postprocessing/summarization").expanduser().resolve()
-    workers = 3
+    BASE_PATH = Path("C:/Users/paolo/Desktop/Ontology-Induction/outputs/exp_7_13/graphragbench_medical")    
+    in_dir = BASE_PATH / "lightrag" / "postprocessing" / "deduplication"
+    out_dir = BASE_PATH / "lightrag" / "postprocessing" / "summarization"
+    workers = 14
 
     logging.basicConfig(
         level=logging.INFO,

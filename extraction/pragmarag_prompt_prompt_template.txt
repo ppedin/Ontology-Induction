@@ -1,0 +1,30 @@
+-Guidelines for Graph Extraction-
+
+Your task is to extract a set of structured facts from the input document in the form of entities and their relationships. You will be guided by a high-level conceptual schema (list of entity types and relation types), which reflects the types of information that are generally important to capture. However, this schema is only a reference — do not try to reproduce it mechanically. Instead, use it to develop an intuition for which concepts and relationships are important.
+
+-Be faithful to the input text. Avoid hallucinating information not clearly stated or implied. Your extractions must be grounded in the content provided.
+
+-Goal-
+
+Given a text document and a list of entity types and relation types derived from a previous abstraction phase, extract from the document:
+
+1. All relevant entities of the given types, or of similar types that align conceptually.
+2. All meaningful relationships between those entities, based on the evidence in the text.
+
+-Steps-
+
+1. Identify all entities. For each identified entity, extract the following information:
+- entity_name: Name of the entity, capitalized
+- entity_type: One of the following or similar types: [{entity_types}]
+- entity_description: Concise but complete description of the entity as grounded in the text
+
+2. From the entities identified in step 1, identify all pairs of (source_entity, target_entity) that are clearly and explicitly related to each other based on the content.
+For each pair of related entities, extract the following information:
+- source_entity: name of the source entity, as identified in step 1
+- target_entity: name of the target entity, as identified in step 1
+- relation_description: explanation based strictly on the input text of why these entities are related
+- relationship_keywords: one or more high-level keywords summarizing the conceptual nature of the relation (e.g., causes, affects, refers_to, enables)
+
+High-level Schema:
+
+{SCHEMA}

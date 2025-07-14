@@ -80,7 +80,7 @@ class GraphDescriptionResponse(BaseModel):
 _THIS_DIR = Path(__file__).parent
 _TEMPLATE_Q_PATH = _THIS_DIR / "abstract_graph_generation_from_question_prompt_template.txt"
 _TEMPLATE_SUM_PATH = _THIS_DIR / "graph_summarizer_prompt_template.txt"
-_OUT_DIR = Path("outputs/graphragbench_medical/extraction/pragmarag")
+_OUT_DIR = Path("outputs/exp_7_13/graphragbench_medical/pragmarag_prompt/extraction")
 _OUT_DIR.mkdir(parents=True, exist_ok=True)
 _TEMPLATE_DISC_PATH = _THIS_DIR / "discoursive_summarizer_prompt_template.txt"
 
@@ -396,16 +396,17 @@ if __name__ == "__main__":
         num_workers=4,
     )
     summarise_subgraphs(
-        input_path=Path("outputs/graphragbench_medical/extraction/pragmarag/abstract_questions_subgraph_abstraction2.jsonl"),
-        output_path=Path("outputs/graphragbench_medical/extraction/pragmarag/abstract_questions_subgraph_abstraction3.jsonl"),
+        input_path=Path("outputs/exp_7_13/graphragbench_medical/pragmarag_prompt/extraction/abstract_questions_subgraphs_abstraction2.jsonl"),
+        output_path=Path("outputs/exp_7_13/graphragbench_medical/pragmarag_prompt/extraction/abstract_questions_subgraphs_abstraction3.jsonl"),
         gemini_client=client,
         model_name="models/gemini-2.5-flash-lite-preview-06-17",
         num_workers=4,
     )
-
+    """
     describe_subgraphs_discursively(
         input_path=Path("outputs/graphragbench_medical/extraction/pragmarag/abstract_questions_subgraph_abstraction3.jsonl"),
         output_path=Path("outputs/graphragbench_medical/extraction/pragmarag/abstract_questions_subgraph_description.txt"),
         gemini_client=client,
         model_name="models/gemini-2.5-flash-lite-preview-06-17",
     )
+    """

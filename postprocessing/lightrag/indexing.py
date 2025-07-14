@@ -59,8 +59,8 @@ REQUIRED_COLUMNS: Final[Sequence[str]] = (
 
 GROUPS: Final[Tuple[Tuple[str, str, str], ...]] = (
     # (file‑prefix, index‑file, metadata‑file)
-    ("entities_", "entities.index", "entity_metadata.pkl"),
-    ("relationships_", "relationships.index", "relationship_metadata.pkl"),
+    ("entities", "entities.index", "entity_metadata.pkl"),
+    ("relationships", "relationships.index", "relationship_metadata.pkl"),
 )
 
 
@@ -142,19 +142,24 @@ def _read_and_validate_parquets(files: List[Path], prefix: str) -> pd.DataFrame:
     dfs = [pd.read_parquet(p) for p in files]
     df = pd.concat(dfs, ignore_index=True)
 
+    # ── Normalizza la colonna "name" a seconda del gruppo ──────────────────
+    if prefix == "entities" and "entity_name" in df.columns:
+        df = df.rename(columns={"entity_name": "name"})
+    elif prefix == "relationships" and "relation_keywords" in df.columns:
+        df = df.rename(columns={"relation_keywords": "name"})
+
+    # ora la lista REQUIRED_COLUMNS funziona invariata
     missing = [c for c in REQUIRED_COLUMNS if c not in df.columns]
     if missing:
         raise ValueError(
             f"File '{prefix}*.parquet' mancanti delle colonne obbligatorie: {missing}"
         )
 
-    # Garanzia che 'embedding' sia lista di float
+    # verifica tipo embedding
     if not df["embedding"].map(
         lambda x: isinstance(x, (list, tuple, np.ndarray))
     ).all():
-        raise TypeError(
-            f"Colonna 'embedding' deve contenere sequenze di float (lista o tuple)."
-        )
+        raise TypeError("Colonna 'embedding' deve contenere sequenze di float.")
 
     return df
 
@@ -194,6 +199,7 @@ def _extract_metadata(df: pd.DataFrame) -> List[Dict[str, str]]:
 # Esecuzione da CLI (opzionale)
 # --------------------------------------------------------------------------- #
 if __name__ == "__main__":  # pragma: no cover
-    input_dir = Path("C:/Users/paolo/Desktop/Ontology-Induction/outputs/graphragbench_medical/postprocessing/embedding")
-    output_dir = Path("C:/Users/paolo/Desktop/Ontology-Induction/outputs/graphragbench_medical/postprocessing/indexing")
+    BASE_PATH = Path("C:/Users/paolo/Desktop/Ontology-Induction/outputs/exp_7_13/graphragbench_medical")
+    input_dir = BASE_PATH / "pragmarag_prompt" / "postprocessing" / "embedding"
+    output_dir = BASE_PATH / "pragmarag_prompt" / "postprocessing" / "indexing"
     build_faiss_indices(input_dir, output_dir)
