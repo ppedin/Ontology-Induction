@@ -6,3 +6,8 @@ pip install pandas
 pip install -U sentence-transformers
 pip install faiss-cpu
 pip install igraph
+pip install -U pip setuptools wheel
+pip install -U spacy
+python -m spacy download en_core_web_sm
+pip install openai
+pip install rapidfuzz
